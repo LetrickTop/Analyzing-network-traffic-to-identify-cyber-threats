@@ -1,0 +1,19 @@
+# macOS
+.DS_Store
+._*
+
+# IDE
+.idea/
+.vscode/
+*.code-workspace
+
+# Python
+__pycache__/
+*.py[cod]
+venv/
+
+# Temporary files
+*.tmp
+*.swp
+*~
+*.bak

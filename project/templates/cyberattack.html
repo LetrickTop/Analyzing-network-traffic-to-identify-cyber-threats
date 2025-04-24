@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Определение Кибератаки</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .attack-badge {
+            font-size: 0.8rem;
+            padding: 0.35em 0.65em;
+        }
+        .history-item {
+            transition: all 0.3s ease;
+        }
+        .history-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container my-5">
+        <h1 class="text-center mb-4">Определение Кибератаки</h1>
+
+        <div class="card shadow-lg mb-4">
+            <div class="card-body">
+                <h3 class="card-title text-center mb-3">
+                    <i class="fas fa-shield-alt me-2"></i>Анализ сетевого трафика
+                </h3>
+                <p class="card-text text-center text-muted">
+                    Система анализирует сетевой трафик в реальном времени с помощью ML-модели
+                </p>
+
+                <div class="text-center my-4">
+                    <button class="btn btn-warning btn-lg" id="analyze-button">
+                        <i class="fas fa-search me-2"></i>Начать Анализ
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="fas fa-chart-bar me-2"></i>Результаты Анализа</h4>
+            </div>
+            <div class="card-body">
+                <div id="analysis-result">
+                    <div class="alert alert-info mb-0">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Нажмите "Начать Анализ" для проверки сетевого трафика
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-header bg-secondary text-white">
+                <h4 class="mb-0"><i class="fas fa-history me-2"></i>История анализов</h4>
+            </div>
+            <div class="card-body p-0">
+                <div id="attack-history" class="list-group list-group-flush">
+                    <div class="list-group-item text-muted text-center py-4">
+                        История анализов будет отображаться здесь
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-center mt-4">
+            <a href="{{ url_for('index') }}" class="btn btn-secondary btn-lg">
+                <i class="fas fa-home me-2"></i>На Главную
+            </a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+
+    <script>
+        const attackHistory = [];
+        const maxHistoryItems = 10;
+
+        document.getElementById("analyze-button").addEventListener("click", async function() {
+            const button = this;
+            button.disabled = true;
+            button.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Анализируем...';
+
+            try {
+                const trafficResponse = await fetch('/data');
+                const packets = await trafficResponse.json();
+
+                if (packets.length === 0) {
+                    throw new Error("Нет данных для анализа. Запустите сниффинг трафика.");
+                }
+
+                const lastPacket = packets[0];
+
+                const modelData = {
+                    protocol: lastPacket.protocol.toLowerCase(),
+                    service: lastPacket.service.toLowerCase(),
+                    flag: lastPacket.flag,
+                    bytes: lastPacket.bytes,
+                    count: lastPacket.count,
+                    srv_count: lastPacket.srv_count,
+                    dst_host_count: lastPacket.dst_host_count,
+                    dst_host_srv_count: lastPacket.dst_host_srv_count
+                };
+
+                const predictionResponse = await fetch('/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(modelData)
+                });
+
+                const result = await predictionResponse.json();
+
+                if (result.error) {
+                    throw new Error(result.error);
+                }
+
+                displayResult(result, lastPacket);
+
+                addToHistory(result, lastPacket);
+
+            } catch (error) {
+                showError(error.message);
+            } finally {
+                button.disabled = false;
+                button.innerHTML = '<i class="fas fa-search me-2"></i>Начать Анализ';
+            }
+        });
+
+        function displayResult(result, packet) {
+            const resultContainer = document.getElementById("analysis-result");
+            const isAttack = result.probability > 0.75;
+            const alertClass = isAttack ? "danger" : "success";
+            const icon = isAttack ? "fa-exclamation-triangle" : "fa-check-circle";
+            const attackType = isAttack ? "Обнаружена атака!" : "Нормальный трафик";
+            const probabilityColor = isAttack ? "danger" : "success";
+
+            resultContainer.innerHTML = `
+                <div class="alert alert-${alertClass}">
+                    <div class="d-flex align-items-center">
+                        <i class="fas ${icon} fa-2x me-3"></i>
+                        <div>
+                            <h4 class="alert-heading mb-1">${attackType}</h4>
+                            <p class="mb-2">Вероятность атаки:
+                                <span class="badge bg-${probabilityColor}">${(result.probability * 100).toFixed(2)}%</span>
+                            </p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5><i class="fas fa-network-wired me-2"></i>Соединение</h5>
+                            <p><i class="fas fa-clock me-2"></i><strong>Время:</strong> ${packet.timestamp}</p>
+                            <p><i class="fas fa-laptop me-2"></i><strong>Источник:</strong> ${packet.src_ip}</p>
+                            <p><i class="fas fa-server me-2"></i><strong>Назначение:</strong> ${packet.dst_ip}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h5><i class="fas fa-info-circle me-2"></i>Характеристики</h5>
+                            <p><i class="fas fa-ethernet me-2"></i><strong>Протокол:</strong> ${packet.protocol}</p>
+                            <p><i class="fas fa-cog me-2"></i><strong>Сервис:</strong> ${packet.service}</p>
+                            <p><i class="fas fa-database me-2"></i><strong>Размер:</strong> ${packet.bytes} байт</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function addToHistory(result, packet) {
+            attackHistory.unshift({
+                result,
+                packet,
+                time: new Date().toLocaleTimeString()
+            });
+
+            if (attackHistory.length > maxHistoryItems) {
+                attackHistory.pop();
+            }
+
+            updateHistoryDisplay();
+        }
+
+        function updateHistoryDisplay() {
+            const historyContainer = document.getElementById("attack-history");
+
+            if (attackHistory.length === 0) {
+                historyContainer.innerHTML = `
+                    <div class="list-group-item text-muted text-center py-4">
+                        История анализов будет отображаться здесь
+                    </div>
+                `;
+                return;
+            }
+
+            historyContainer.innerHTML = attackHistory.map((item, idx) => `
+                <div class="list-group-item history-item ${item.result.probability > 0.75 ? 'list-group-item-danger' : 'list-group-item-success'}">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="fw-bold">#${idx + 1}</span>
+                            <span class="ms-2">${item.packet.src_ip} → ${item.packet.dst_ip}</span>
+                        </div>
+                        <div>
+                            <span class="badge attack-badge bg-${item.result.probability > 0.75 ? 'danger' : 'success'}">
+                                ${item.result.probability > 0.75 ? 'ATTACK' : 'NORMAL'}
+                            </span>
+                            <small class="text-muted ms-2">${item.time}</small>
+                        </div>
+                    </div>
+                    <div class="mt-2 d-flex justify-content-between">
+                        <small class="text-muted">
+                            <i class="fas fa-ethernet me-1"></i>${item.packet.protocol} /
+                            <i class="fas fa-cog me-1"></i>${item.packet.service}
+                        </small>
+                        <span class="badge attack-badge bg-dark">
+                            ${(item.result.probability * 100).toFixed(1)}%
+                        </span>
+                    </div>
+                </div>
+            `).join("");
+        }
+
+        function showError(message) {
+            document.getElementById("analysis-result").innerHTML = `
+                <div class="alert alert-danger">
+                    <i class="fas fa-exclamation-circle me-2"></i>
+                    ${message}
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

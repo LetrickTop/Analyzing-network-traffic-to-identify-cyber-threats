@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Руководство пользователя</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .instruction-card {
+            border-radius: 15px;
+            border-left: 5px solid #4e73df;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+        .instruction-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .step-number {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background: #4e73df;
+            color: white;
+            text-align: center;
+            border-radius: 50%;
+            margin-right: 10px;
+            line-height: 30px;
+        }
+        .feature-icon {
+            font-size: 2rem;
+            color: #4e73df;
+            margin-bottom: 15px;
+        }
+        .nav-pills .nav-link.active {
+            background-color: #4e73df;
+        }
+        .nav-pills .nav-link {
+            color: #4e73df;
+        }
+        .tab-content {
+            padding: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container my-5">
+        <div class="text-center mb-5">
+            <h1 class="display-4 mb-3"><i class="fas fa-book-open me-2"></i>Руководство пользователя</h1>
+            <p class="lead text-muted">Полное руководство по работе с системой анализа сетевого трафика</p>
+        </div>
+
+        <div class="row mb-5">
+            <div class="col-md-6 col-lg-3 mb-4">
+                <div class="card h-100 instruction-card">
+                    <div class="card-body text-center">
+                        <div class="feature-icon">
+                            <i class="fas fa-network-wired"></i>
+                        </div>
+                        <h5>Сниффинг трафика</h5>
+                        <p class="text-muted">Захват и анализ сетевых пакетов в реальном времени</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3 mb-4">
+                <div class="card h-100 instruction-card">
+                    <div class="card-body text-center">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h5>Обнаружение атак</h5>
+                        <p class="text-muted">Выявление подозрительной активности с помощью ML</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3 mb-4">
+                <div class="card h-100 instruction-card">
+                    <div class="card-body text-center">
+                        <div class="feature-icon">
+                            <i class="fas fa-chart-pie"></i>
+                        </div>
+                        <h5>Визуализация</h5>
+                        <p class="text-muted">Наглядные графики и диаграммы трафика</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3 mb-4">
+                <div class="card h-100 instruction-card">
+                    <div class="card-body text-center">
+                        <div class="feature-icon">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <h5>Хранение данных</h5>
+                        <p class="text-muted">Архивирование и анализ исторических данных</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-3 mb-4">
+                <div class="card">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0"><i class="fas fa-list-ul me-2"></i>Разделы</h5>
+                    </div>
+                    <div class="list-group list-group-flush">
+                        <a href="#basics" class="list-group-item list-group-item-action active">
+                            <i class="fas fa-play-circle me-2"></i>Основы работы
+                        </a>
+                        <a href="#sniffing" class="list-group-item list-group-item-action">
+                            <i class="fas fa-network-wired me-2"></i>Сниффинг
+                        </a>
+                        <a href="#analysis" class="list-group-item list-group-item-action">
+                            <i class="fas fa-search me-2"></i>Анализ атак
+                        </a>
+                        <a href="#analytics" class="list-group-item list-group-item-action">
+                            <i class="fas fa-chart-bar me-2"></i>Аналитика
+                        </a>
+                        <a href="#faq" class="list-group-item list-group-item-action">
+                            <i class="fas fa-question-circle me-2"></i>FAQ
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-9">
+                <div id="basics" class="mb-5">
+                    <h3 class="mb-4"><i class="fas fa-play-circle me-2"></i>Основы работы</h3>
+                    <div class="card instruction-card">
+                        <div class="card-body">
+                            <p>Система анализа сетевого трафика позволяет:</p>
+                            <ul class="list-group list-group-flush mb-3">
+                                <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i>Захватывать сетевые пакеты в реальном времени</li>
+                                <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i>Анализировать трафик на предмет аномалий</li>
+                                <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i>Визуализировать статистику по протоколам и сервисам</li>
+                                <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i>Хранить историю трафика для последующего анализа</li>
+                            </ul>
+                            <p class="mb-0">Для начала работы выберите нужный раздел в верхнем меню.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="sniffing" class="mb-5">
+                    <h3 class="mb-4"><i class="fas fa-network-wired me-2"></i>Сниффинг трафика</h3>
+
+                    <div class="card instruction-card mb-4">
+                        <div class="card-body">
+                            <h5><span class="step-number">1</span>Запуск сниффинга</h5>
+                            <p>Для начала захвата трафика:</p>
+                            <ol>
+                                <li>Перейдите в раздел "Сниффинг трафика"</li>
+                                <li>Нажмите кнопку <button class="btn btn-success btn-sm"><i class="fas fa-play-circle"></i> Начать Сниффинг</button></li>
+                                <li>Дождитесь появления первых пакетов в таблице</li>
+                            </ol>
+                            <div class="alert alert-info mt-3">
+                                <i class="fas fa-info-circle me-2"></i>Для работы сниффера требуются права администратора на вашей системе.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card instruction-card mb-4">
+                        <div class="card-body">
+                            <h5><span class="step-number">2</span>Анализ данных</h5>
+                            <p>В таблице отображаются следующие параметры:</p>
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Параметр</th>
+                                            <th>Описание</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Время</td>
+                                            <td>Метка времени пакета</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Источник/Назначение</td>
+                                            <td>IP-адреса отправителя и получателя</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Протокол</td>
+                                            <td>Используемый сетевой протокол (TCP, UDP, ICMP)</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Размер</td>
+                                            <td>Размер пакета в байтах</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Сервис</td>
+                                            <td>Сетевой сервис (HTTP, FTP, SSH и т.д.)</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card instruction-card">
+                        <div class="card-body">
+                            <h5><span class="step-number">3</span>Остановка сниффинга</h5>
+                            <p>Для остановки захвата трафика:</p>
+                            <ol>
+                                <li>Нажмите кнопку <button class="btn btn-danger btn-sm"><i class="fas fa-stop-circle"></i> Остановить Сниффинг</button></li>
+                                <li>Дождитесь завершения обработки последних пакетов</li>
+                            </ol>
+                            <div class="alert alert-warning mt-3">
+                                <i class="fas fa-exclamation-triangle me-2"></i>Длительный захват трафика может потребовать значительных ресурсов системы.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="analysis" class="mb-5">
+                    <h3 class="mb-4"><i class="fas fa-search me-2"></i>Анализ кибератак</h3>
+
+                    <div class="card instruction-card mb-4">
+                        <div class="card-body">
+                            <h5><span class="step-number">1</span>Запуск анализа</h5>
+                            <p>Для проверки трафика на атаки:</p>
+                            <ol>
+                                <li>Перейдите в раздел "Анализ кибератак"</li>
+                                <li>Нажмите кнопку <button class="btn btn-warning btn-sm"><i class="fas fa-search"></i> Начать Анализ</button></li>
+                                <li>Дождитесь результатов анализа</li>
+                            </ol>
+                            <p>Система использует машинное обучение для выявления:</p>
+                            <ul>
+                                <li>DDoS атак</li>
+                                <li>Попыток сканирования портов</li>
+                                <li>Подозрительных флагов TCP</li>
+                                <li>Аномальных объемов трафика</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card instruction-card">
+                        <div class="card-body">
+                            <h5><span class="step-number">2</span>Интерпретация результатов</h5>
+                            <div class="alert alert-success">
+                                <h5><i class="fas fa-check-circle me-2"></i>Нормальный трафик</h5>
+                                <p class="mb-0">Зеленый индикатор означает, что трафик соответствует нормальным паттернам.</p>
+                            </div>
+                            <div class="alert alert-danger mt-3">
+                                <h5><i class="fas fa-exclamation-triangle me-2"></i>Обнаружена атака!</h5>
+                                <p class="mb-0">Красный индикатор сигнализирует о потенциальной атаке. Проверьте детали для получения дополнительной информации.</p>
+                            </div>
+                            <p class="mt-3">Вероятность атаки отображается в процентах. Значения выше 70% следует рассматривать как серьезную угрозу.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="analytics" class="mb-5">
+                    <h3 class="mb-4"><i class="fas fa-chart-bar me-2"></i>Аналитика трафика</h3>
+
+                    <div class="card instruction-card">
+                        <div class="card-body">
+                            <h5><span class="step-number">1</span>Использование аналитики</h5>
+                            <p>В разделе "Аналитика" представлены:</p>
+                            <ul>
+                                <li>Круговая диаграмма распределения протоколов</li>
+                                <li>Гистограмма использования сетевых сервисов</li>
+                                <li>Статистика по количеству пакетов</li>
+                            </ul>
+                            <p>Данные обновляются автоматически при поступлении нового трафика.</p>
+                            <div class="alert alert-info mt-3">
+                                <i class="fas fa-lightbulb me-2"></i>Используйте аналитику для выявления аномальных пропорций трафика, которые могут указывать на атаку.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="faq" class="mb-5">
+                    <h3 class="mb-4"><i class="fas fa-question-circle me-2"></i>Часто задаваемые вопросы</h3>
+
+                    <div class="accordion" id="faqAccordion">
+                        <div class="card mb-2">
+                            <div class="card-header" id="headingOne">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+                                        Какие права нужны для работы сниффера?
+                                    </button>
+                                </h5>
+                            </div>
+                            <div id="collapseOne" class="collapse show" data-parent="#faqAccordion">
+                                <div class="card-body">
+                                    Для захвата сетевого трафика требуются права администратора (root/sudo на Linux/macOS или запуск от имени администратора на Windows).
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card mb-2">
+                            <div class="card-header" id="headingTwo">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+                                        Как часто обновляются данные?
+                                    </button>
+                                </h5>
+                            </div>
+                            <div id="collapseTwo" class="collapse" data-parent="#faqAccordion">
+                                <div class="card-body">
+                                    Данные в таблице обновляются каждую секунду. Графики аналитики обновляются при изменении данных.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card mb-2">
+                            <div class="card-header" id="headingThree">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree">
+                                        Какие типы атак может обнаружить система?
+                                    </button>
+                                </h5>
+                            </div>
+                            <div id="collapseThree" class="collapse" data-parent="#faqAccordion">
+                                <div class="card-body">
+                                    Система обучена обнаруживать: DoS/DDoS атаки, сканирование портов, попытки brute-force, подозрительные флаги TCP, аномальную активность сервисов.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-5">
+            <a href="{{ url_for('index') }}" class="btn btn-primary btn-lg">
+                <i class="fas fa-home me-2"></i>На главную
+            </a>
+            <a href="{{ url_for('sniffing_page') }}" class="btn btn-success btn-lg ms-3">
+                <i class="fas fa-play me-2"></i>Начать работу
+            </a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+    <script>
+        // Плавная прокрутка к якорям
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
